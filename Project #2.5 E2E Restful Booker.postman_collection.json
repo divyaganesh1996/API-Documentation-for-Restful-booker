@@ -1,0 +1,304 @@
+{
+	"info": {
+		"_postman_id": "6b356277-c3b5-478c-9eca-a670dd351483",
+		"name": "Project #2.5 E2E Restful Booker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48413244",
+		"_collection_link": "https://divya-ganesh9096-8526048.postman.co/workspace/ABT14X~e3c76774-4ecd-4617-bef3-5181c26c24b5/collection/48413244-6b356277-c3b5-478c-9eca-a670dd351483?action=share&source=collection_link&creator=48413244"
+	},
+	"item": [
+		{
+			"name": "Flow #1",
+			"item": []
+		},
+		{
+			"name": "step 1 - Create Booking TC",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//get the booking id and store it in globals",
+							"pm.test(\"Store Booking ID\", function () {",
+							"\tpm.response.to.have.status(200);",
+							"\tvar jsonData = pm.response.json();",
+							"\tpm.expect(jsonData.bookingid).to.not.be.null;",
+							"\tpm.environment.set(\"bookingid\", jsonData.bookingid);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//console.log(\"before test\")"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Ianis\",\n    \"lastname\" : \"Hagi\",\n    \"totalprice\" : \"ggh\",\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"1996-08-12\",\n        \"checkout\" : \"2001-05-26\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/booking",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 2  - Update Booking by ID TC",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//add 200 status code test",
+							"pm.test(\"Status code is 200\", function () {",
+							"\tpm.response.to.have.status(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Divya\",\n    \"lastname\" : \"Hagi\",\n    \"totalprice\" : 10,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"1996-08-12\",\n        \"checkout\" : \"2001-05-26\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/booking/{{bookingid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 3 - verify that the Booking is updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//check if firstname is updated to Divya\r",
+							"pm.test(\"firstname is updated to Divya\", function () {\r",
+							"\tpm.expect(pm.response.json().firstname).to.eql(\"Divya\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/booking/{{bookingid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 4 - Delete the request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful (Booking Deletion)\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/booking/{{bookingid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "step 5 - verify request is deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//add 404 as the request is deleted\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"\tpm.response.to.have.status(404);\r",
+							"\t});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/booking/{{bookingid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
